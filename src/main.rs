@@ -14,7 +14,7 @@ type ImageRef<'a> = &'a mut ImageBuffer<Rgba<u8>, Vec<u8>>;
 const ORIGINAL_IMAGE: &str = "image/wallpaper.png";
 
 const CLOCK_CENTER: (i32, i32) = (631, 88);
-const WHITE: Rgba<u8> = Rgba([255u8, 255u8, 255u8, 255u8]);
+const WHITE: Rgba<u8> = Rgba([255, 255, 255, 255]);
 const LINE_WEIGHT: u8 = 3;
 
 // i don't actually know why this works, but it does, so yeah
