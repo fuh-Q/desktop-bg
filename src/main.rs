@@ -3,15 +3,15 @@ mod cli;
 use wallpaper;
 use clap::Parser;
 use image::{ImageBuffer, Rgba, open};
+use std::{f32::consts::PI, error::Error, env};
 use chrono::{prelude::{DateTime, Local}, Timelike};
-use std::{f32::consts::PI, path::Path, error::Error, env};
 use imageproc::{
     pixelops::interpolate,
     drawing::draw_antialiased_line_segment_mut as draw_line,
 };
 
 type ImageRef<'a> = &'a mut ImageBuffer<Rgba<u8>, Vec<u8>>;
-const ORIGINAL_IMAGE: &str = "image/wallpaper.png";
+const ORIGINAL_IMAGE: &str = "image\\wallpaper.png";
 
 const CLOCK_CENTER: (i32, i32) = (631, 88);
 const WHITE: Rgba<u8> = Rgba([255, 255, 255, 255]);
@@ -61,7 +61,7 @@ fn draw_hand(image: ImageRef, mut hand_value: f32, is_hour_hand: bool, color: Rg
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
-    let image_path = Path::new(ORIGINAL_IMAGE);
+    let image_path = env::current_exe()?.ancestors().nth(3).unwrap().join(ORIGINAL_IMAGE);
     let target = env::current_dir()?.join(&cli_args.target);
 
     let mut image = open(&image_path)?;
