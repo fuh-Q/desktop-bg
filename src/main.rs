@@ -72,9 +72,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     draw_hand(image, minutes, false, WHITE);
     draw_hand(image, hours, true, WHITE);
 
-    image.save(&target)?;
+    let target_str = target.as_os_str().to_str().unwrap();
+    match image.save(&target) {
+        Ok(()) => {},
+        Err(e) => {
+            eprintln!("{e} (Path: {target_str})");
+            std::process::exit(1);
+        },
+    };
+
     if cli_args.wallpaper {
-        wallpaper::set_from_path(&target.as_os_str().to_str().unwrap())?;
+        wallpaper::set_from_path(target_str)?;
     }
 
     Ok(())

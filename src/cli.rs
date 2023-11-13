@@ -6,7 +6,7 @@ pub struct CLI {
         long,
         short='t',
         help="Destination to save output",
-        default_value="image/generated.png",
+        default_value="image\\generated.png",
     )]
     pub target: String,
 
