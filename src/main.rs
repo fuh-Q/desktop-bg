@@ -4,7 +4,7 @@ use wallpaper;
 use clap::Parser;
 use image::{ImageBuffer, Rgba, open};
 use chrono::{prelude::{DateTime, Local}, Timelike};
-use std::{f32::consts::PI, path::Path, error::Error};
+use std::{f32::consts::PI, path::Path, error::Error, env};
 use imageproc::{
     pixelops::interpolate,
     drawing::draw_antialiased_line_segment_mut as draw_line,
@@ -62,9 +62,9 @@ fn draw_hand(image: ImageRef, mut hand_value: f32, is_hour_hand: bool, color: Rg
 fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
     let image_path = Path::new(ORIGINAL_IMAGE);
-    let target = Path::new(&cli_args.target);
+    let target = env::current_dir()?.join(&cli_args.target);
 
-    let mut image = open(image_path)?;
+    let mut image = open(&image_path)?;
     let image = image.as_mut_rgba8().unwrap();
 
     let (hours, minutes) = get_time(&cli_args);
@@ -72,8 +72,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     draw_hand(image, minutes, false, WHITE);
     draw_hand(image, hours, true, WHITE);
 
-    image.save(target)?;
-    if cli_args.wallpaper { wallpaper::set_from_path(&cli_args.target)?; }
+    image.save(&target)?;
+    if cli_args.wallpaper {
+        wallpaper::set_from_path(&target.as_os_str().to_str().unwrap())?;
+    }
 
     Ok(())
 }
