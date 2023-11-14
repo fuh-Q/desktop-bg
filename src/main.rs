@@ -74,7 +74,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let target_str = target.as_os_str().to_str().unwrap();
     if let Err(e) = image.save(&target) {
-        eprintln!("{e} (Path: {target_str})\n\nTry specifying one with the --target flag");
+        eprintln!("{e} (Path: {target_str})");
         std::process::exit(1);
     }
 
