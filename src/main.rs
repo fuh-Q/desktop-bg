@@ -63,11 +63,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
     let image_path = env::current_exe()?.ancestors().nth(3).unwrap().join(ORIGINAL_IMAGE);
     let target = env::current_dir()?.join(&cli_args.target.replace("/", "\\"));
-    let target_str = target.as_os_str().to_str().unwrap();
-    if !target.exists() {
-        eprintln!("Path {target_str} not found\n\nTry specifying one with the --target flag");
-        std::process::exit(1);
-    }
 
     let mut image = open(&image_path)?;
     let image = image.as_mut_rgba8().unwrap();
@@ -77,7 +72,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     draw_hand(image, minutes, false, WHITE);
     draw_hand(image, hours, true, WHITE);
 
-    image.save(&target)?;
+    let target_str = target.as_os_str().to_str().unwrap();
+    if let Err(e) = image.save(&target) {
+        eprintln!("{e} (Path: {target_str})\n\nTry specifying one with the --target flag");
+        std::process::exit(1);
+    }
+
     if cli_args.wallpaper {
         wallpaper::set_from_path(target_str)?;
     }
