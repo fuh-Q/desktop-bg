@@ -3,9 +3,10 @@ use clap::Parser;
 #[derive(Parser)]
 pub struct CLI {
     #[arg(
+        long,
+        short='t',
         help="Destination to save output",
         required=true,
-        index=1,
     )]
     pub target: String,
 
