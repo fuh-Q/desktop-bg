@@ -74,7 +74,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let target_str = target.as_os_str().to_str().unwrap();
     match image.save(&target) {
-        Ok(()) => { println!("Image saved at: {target_str}") }
+        Ok(()) => { println!("Successfully saved at => {target_str}") }
         Err(e) => {
             eprintln!("{e} (Path: {target_str})");
             std::process::exit(1);
