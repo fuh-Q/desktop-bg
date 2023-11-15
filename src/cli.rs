@@ -3,10 +3,9 @@ use clap::Parser;
 #[derive(Parser)]
 pub struct CLI {
     #[arg(
-        long,
-        short='t',
         help="Destination to save output",
-        default_value="image\\generated.png",
+        required=true,
+        index=1,
     )]
     pub target: String,
 
