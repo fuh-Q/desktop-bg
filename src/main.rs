@@ -73,13 +73,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     draw_hand(image, hours, true, WHITE);
 
     let target_str = target.as_os_str().to_str().unwrap();
-    if let Err(e) = image.save(&target) {
-        eprintln!("{e} (Path: {target_str})");
-        std::process::exit(1);
+    match image.save(&target) {
+        Ok(()) => { println!("Image saved at: {target_str}") }
+        Err(e) => {
+            eprintln!("{e} (Path: {target_str})");
+            std::process::exit(1);
+        }
     }
 
     if cli_args.wallpaper {
-        wallpaper::set_from_path(target_str)?;
+        match wallpaper::set_from_path(target_str) {
+            Ok(()) => { println!("Wallpaper successfully set") }
+            Err(e) => { eprintln!("Wallpaper failed to set: {e}") }
+        }
     }
 
     Ok(())
