@@ -37,20 +37,13 @@ fn get_length(x: f32) -> f32 {
 
 // https://desmos.com/calculator/ee92c50qh5
 fn get_angle(x: f32) -> f32 {
-    // 16/3x - 90
     if x <= 15. {
         16. / 3. * x - 90.
-    }
-    // 20/3x - 110
-    else if x <= 30. {
+    } else if x <= 30. {
         20. / 3. * x - 110.
-    }
-    // 16/3x - 70
-    else if x <= 45. {
+    } else if x <= 45. {
         16. / 3. * x - 70.
-    }
-    // 20/3x - 130
-    else {
+    } else {
         20. / 3. * x - 130.
     }
 }
