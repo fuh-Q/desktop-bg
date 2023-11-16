@@ -14,7 +14,7 @@ impl Loop {
     pub fn in_directory(path: PathBuf) -> Result<Self, String> {
         if !path.is_dir() { return Err(format!("Not a directory ({})", path.display())); }
 
-        Ok(Loop { directory: path })
+        Ok(Self { directory: path })
     }
 
     pub fn run(&self) -> ! {
