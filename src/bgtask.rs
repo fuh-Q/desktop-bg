@@ -19,7 +19,7 @@ impl Loop {
 
     pub fn run(&self) -> ! {
         loop {
-            self.set_wallpaper_current_time();
+            self.set_current_time();
             let rn = Local::now();
 
             let delay = 60 - rn.second() as u64;
@@ -27,7 +27,7 @@ impl Loop {
         }
     }
 
-    fn set_wallpaper_current_time(&self) {
+    pub fn set_current_time(&self) {
         let rn = Local::now();
         let path = self.directory.join(format!("{}-{}.png", rn.hour(), rn.minute()));
 

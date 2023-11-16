@@ -11,15 +11,14 @@ use std::{
     error::Error,
     fmt::Display,
     path::PathBuf,
-    io::Result as ioResult,
 };
 
 const ORIGINAL_IMAGE: &str = "image\\wallpaper.png";
 
-fn path_from_input<S>(input: S) -> ioResult<PathBuf>
+fn path_from_input<S>(input: S) -> PathBuf
 where S: AsRef<str>
 {
-    Ok(env::current_dir()?.join(input.as_ref().replace("/", "\\")))
+    env::current_dir().unwrap().join(input.as_ref().replace("/", "\\"))
     // windows moment
 }
 
@@ -44,10 +43,14 @@ fn start_loop(path: PathBuf) -> ! {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
-    if cli_args.loop_dir { start_loop(path_from_input(&cli_args.target)?); }
+    if cli_args.loop_dir { start_loop(path_from_input(&cli_args.target)); }
+    else if cli_args.set_current {
+        bgtask::Loop::in_directory(path_from_input(&cli_args.target))?.set_current_time();
+        std::process::exit(0);
+    }
 
     let image_path = env::current_exe()?.ancestors().nth(3).unwrap().join(ORIGINAL_IMAGE);
-    let target = path_from_input(&cli_args.target)?;
+    let target = path_from_input(&cli_args.target);
 
     let mut image = open(&image_path)?;
     let image = image.as_mut_rgba8().unwrap();

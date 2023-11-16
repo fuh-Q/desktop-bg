@@ -38,7 +38,13 @@ pub struct CLI {
         long = "loop",
         help = "Change the wallpaper every minute, loop through a directory with pre-generated images"
     )]
-    pub loop_dir: bool
+    pub loop_dir: bool,
+
+    #[arg(
+        long = "set-current",
+        help = "Set the wallpaper to the current time, using a pre-generated image from a target directory"
+    )]
+    pub set_current: bool
 }
 
 impl CLI {
