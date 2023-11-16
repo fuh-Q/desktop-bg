@@ -44,7 +44,7 @@ fn handle_loop(path: PathBuf) -> ! {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
-    if cli_args.loop_dir { handle_loop(path_from_input(&cli_args.target)?) }
+    if cli_args.loop_dir { handle_loop(path_from_input(&cli_args.target)?); }
 
     let image_path = env::current_exe()?.ancestors().nth(3).unwrap().join(ORIGINAL_IMAGE);
     let target = path_from_input(&cli_args.target)?;
