@@ -1,42 +1,42 @@
-use clap::Parser;
 use chrono::{prelude::Local, Timelike};
+use clap::Parser;
 
 #[derive(Parser)]
 pub struct CLI {
     #[arg(
         long,
-        short='t',
-        help="Destination to save output\nIf the --loop flag is used, this will instead specify a loop directory",
-        required=true,
+        short = 't',
+        help = "Destination to save output\nIf the --loop flag is used, this will instead specify a loop directory",
+        required = true
     )]
     pub target: String,
 
     #[arg(
         long,
-        short='M',
-        help="Where the minute hand should be",
-        default_value="current",
+        short = 'M',
+        help = "Where the minute hand should be",
+        default_value = "current"
     )]
     pub minutes: String,
 
     #[arg(
         long,
-        short='H',
-        help="Where the hour hand should be",
-        default_value="current",
+        short = 'H',
+        help = "Where the hour hand should be",
+        default_value = "current"
     )]
     pub hours: String,
 
     #[arg(
         long,
-        help="Sets the output as the desktop wallpaper",
-        default_value="false",
+        help = "Sets the output as the desktop wallpaper",
+        default_value = "false"
     )]
     pub wallpaper: bool,
 
     #[arg(
-        long="loop",
-        help="Change the wallpaper every minute, loop through a directory with pre-generated images",
+        long = "loop",
+        help = "Change the wallpaper every minute, loop through a directory with pre-generated images"
     )]
     pub loop_dir: bool
 }

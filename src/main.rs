@@ -27,8 +27,8 @@ where S: AsRef<str>
 fn exit_with_msg<S>(msg: S, code: i32) -> !
 where S: AsRef<str> + Display
 {
-    if code != 0 { eprintln!("{msg}") }
-    else { println!("{msg}") }
+    if code != 0 { eprintln!("{msg}"); }
+    else { println!("{msg}"); }
     std::process::exit(code);
 }
 
@@ -61,13 +61,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let target_str = target.as_path().to_str().unwrap();
     match image.save(&target) {
         Ok(()) => println!("Successfully saved at => {target_str}"),
-        Err(e) => exit_with_msg(format!("{e} (Path: {target_str})"), 1)
+        Err(e) => exit_with_msg(format!("{e} (Path: {target_str})"), 1),
     }
 
     if cli_args.wallpaper {
         match wallpaper::set_from_path(target_str) {
             Ok(()) => println!("Wallpaper successfully set ({target_str})"),
-            Err(e) => eprintln!("Failed setting wallpaper: {e}")
+            Err(e) => eprintln!("Failed setting wallpaper: {e}"),
         }
     }
 

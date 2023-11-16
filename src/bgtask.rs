@@ -4,7 +4,7 @@ use chrono::{DateTime, Local, Timelike};
 use std::{
     thread,
     path::PathBuf,
-    time::Duration as StdDuration
+    time::Duration as StdDuration,
 };
 
 const SIXTY_SECONDS: StdDuration = StdDuration::from_secs(60u64);
@@ -13,7 +13,7 @@ pub struct Loop { directory: PathBuf }
 
 impl Loop {
     pub fn in_directory(path: PathBuf) -> Result<Self, String> {
-        if !path.is_dir() { return Err(format!("Not a directory ({})", path.display())) }
+        if !path.is_dir() { return Err(format!("Not a directory ({})", path.display())); }
 
         Ok(Loop { directory: path })
     }
@@ -26,7 +26,7 @@ impl Loop {
 
         loop {
             self.set_wallpaper_current_time();
-            thread::sleep(SIXTY_SECONDS)
+            thread::sleep(SIXTY_SECONDS);
         }
     }
 
