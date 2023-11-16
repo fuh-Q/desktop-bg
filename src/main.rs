@@ -44,7 +44,7 @@ fn start_loop(path: PathBuf) -> ! {
 fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
     if cli_args.loop_dir { start_loop(path_from_input(&cli_args.target)); }
-    else if cli_args.set_current {
+    else if cli_args.run_once {
         bgtask::Loop::in_directory(path_from_input(&cli_args.target))?.set_current_time();
         std::process::exit(0);
     }
