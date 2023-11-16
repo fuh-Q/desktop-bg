@@ -3,7 +3,6 @@ mod drawing;
 mod bgtask;
 
 use ctrlc;
-use wallpaper;
 use image::open;
 use clap::Parser;
 use std::{
@@ -43,8 +42,9 @@ fn start_loop(path: PathBuf) -> ! {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
-    if cli_args.loop_dir { start_loop(path_from_input(&cli_args.target)); }
-    else if cli_args.run_once {
+    if cli_args.loop_dir {
+        start_loop(path_from_input(&cli_args.target));
+    } else if cli_args.run_once {
         bgtask::Loop::in_directory(path_from_input(&cli_args.target))?.set_current_time();
         std::process::exit(0);
     }
@@ -67,10 +67,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     if cli_args.wallpaper {
-        match wallpaper::set_from_path(target_str) {
-            Ok(()) => println!("Wallpaper successfully set ({target_str})"),
-            Err(e) => exit_with_msg(format!("Failed setting wallpaper: {e}"), 1),
-        }
+        bgtask::try_set_wallpaper(target_str);
     }
 
     Ok(())

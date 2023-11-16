@@ -31,9 +31,13 @@ impl Loop {
         let rn = Local::now();
         let path = self.directory.join(format!("{}-{}.png", rn.hour(), rn.minute()));
 
-        match wallpaper::set_from_path(path.as_path().to_str().unwrap()) {
-            Ok(()) => println!("Wallpaper successfully set ({})", path.display()),
-            Err(e) => exit_with_msg(format!("Failed setting wallpaper: {e}\nExiting..."), 1),
-        }
+        try_set_wallpaper(path.as_path().to_str().unwrap());
+    }
+}
+
+pub fn try_set_wallpaper(path_str: &str) {
+    match wallpaper::set_from_path(path_str) {
+        Ok(()) => println!("Wallpaper successfully set ({path_str})"),
+        Err(e) => exit_with_msg(format!("Failed setting wallpaper: {e}\nExiting..."), 1),
     }
 }
