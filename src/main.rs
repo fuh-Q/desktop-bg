@@ -4,8 +4,8 @@ mod bgtask;
 
 use ctrlc;
 use wallpaper;
+use image::open;
 use clap::Parser;
-use image::{Rgba, open};
 use std::{
     env,
     error::Error,
@@ -15,7 +15,6 @@ use std::{
 };
 
 const ORIGINAL_IMAGE: &str = "image\\wallpaper.png";
-const WHITE: Rgba<u8> = Rgba([255, 255, 255, 255]);
 
 fn path_from_input<S>(input: S) -> ioResult<PathBuf>
 where S: AsRef<str>
@@ -55,8 +54,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let (hours, minutes) = cli_args.get_time();
 
-    drawing::draw_hand(image, minutes, false, WHITE);
-    drawing::draw_hand(image, hours, true, WHITE);
+    drawing::draw_hand(image, minutes, false);
+    drawing::draw_hand(image, hours, true);
 
     let target_str = target.as_path().to_str().unwrap();
     match image.save(&target) {
@@ -67,7 +66,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if cli_args.wallpaper {
         match wallpaper::set_from_path(target_str) {
             Ok(()) => println!("Wallpaper successfully set ({target_str})"),
-            Err(e) => eprintln!("Failed setting wallpaper: {e}"),
+            Err(e) => exit_with_msg(format!("Failed setting wallpaper: {e}"), 1),
         }
     }
 

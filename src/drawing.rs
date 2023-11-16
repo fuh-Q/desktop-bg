@@ -1,13 +1,14 @@
+use std::f32::consts::PI;
 use image::{ImageBuffer, Rgba};
 use imageproc::{drawing::draw_antialiased_line_segment_mut as draw_line, pixelops::interpolate};
-use std::f32::consts::PI;
 
 type ImageRef<'a> = &'a mut ImageBuffer<Rgba<u8>, Vec<u8>>;
 
+const WHITE: Rgba<u8> = Rgba([255, 255, 255, 255]);
 const CLOCK_CENTER: (i32, i32) = (631, 88);
 const LINE_WEIGHT: u8 = 3;
 
-pub fn draw_hand(image: ImageRef, mut hand_value: f32, is_hour_hand: bool, color: Rgba<u8>) {
+pub fn draw_hand(image: ImageRef, mut hand_value: f32, is_hour_hand: bool) {
     let mut length_scale = 1.;
     if is_hour_hand {
         hand_value *= 5.;
@@ -25,7 +26,7 @@ pub fn draw_hand(image: ImageRef, mut hand_value: f32, is_hour_hand: bool, color
 
     // repeat to add weight/thickness to the lines
     for _ in 0..LINE_WEIGHT {
-        draw_line(image, CLOCK_CENTER, end, color, interpolate);
+        draw_line(image, CLOCK_CENTER, end, WHITE, interpolate);
     }
 }
 

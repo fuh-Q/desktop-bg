@@ -1,4 +1,5 @@
 use crate::exit_with_msg;
+
 use wallpaper;
 use chrono::{Local, Timelike};
 use std::{
@@ -16,7 +17,7 @@ impl Loop {
         Ok(Loop { directory: path })
     }
 
-    pub fn run(self) -> ! {
+    pub fn run(&self) -> ! {
         loop {
             self.set_wallpaper_current_time();
             let rn = Local::now();
