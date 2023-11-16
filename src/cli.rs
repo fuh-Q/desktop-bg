@@ -1,4 +1,4 @@
-use chrono::{prelude::Local, Timelike};
+use chrono::{Local, Timelike};
 use clap::Parser;
 
 #[derive(Parser)]

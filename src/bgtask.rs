@@ -1,13 +1,11 @@
 use crate::exit_with_msg;
 use wallpaper;
-use chrono::{DateTime, Local, Timelike};
+use chrono::{Local, Timelike};
 use std::{
     thread,
     path::PathBuf,
     time::Duration as StdDuration,
 };
-
-const SIXTY_SECONDS: StdDuration = StdDuration::from_secs(60u64);
 
 pub struct Loop { directory: PathBuf }
 
@@ -19,18 +17,16 @@ impl Loop {
     }
 
     pub fn run(self) -> ! {
-        let rn = self.set_wallpaper_current_time();
-
-        let delay = 60 - rn.second() as u64;
-        thread::sleep(StdDuration::from_secs(delay));
-
         loop {
             self.set_wallpaper_current_time();
-            thread::sleep(SIXTY_SECONDS);
+            let rn = Local::now();
+
+            let delay = 60 - rn.second() as u64;
+            thread::sleep(StdDuration::from_secs(delay));
         }
     }
 
-    fn set_wallpaper_current_time(&self) -> DateTime<Local> {
+    fn set_wallpaper_current_time(&self) {
         let rn = Local::now();
         let path = self.directory.join(format!("{}-{}.png", rn.hour(), rn.minute()));
 
@@ -38,7 +34,5 @@ impl Loop {
             Ok(()) => println!("Wallpaper successfully set ({})", path.display()),
             Err(e) => exit_with_msg(format!("Failed setting wallpaper: {e}\nExiting..."), 1),
         }
-
-        rn
     }
 }
