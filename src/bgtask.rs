@@ -1,5 +1,6 @@
 use crate::exit_with_msg;
 
+use ctrlc;
 use wallpaper;
 use chrono::{Local, Timelike};
 use std::{
@@ -32,6 +33,17 @@ impl Loop {
         let path = self.directory.join(format!("{}-{}.png", rn.hour(), rn.minute()));
 
         try_set_wallpaper(path.as_path().to_str().unwrap());
+    }
+}
+
+pub fn start_loop(path: PathBuf) -> ! {
+    if let Err(e) = ctrlc::set_handler(|| exit_with_msg("Exiting...", 0)) {
+        exit_with_msg(format!("Failed setting CTRL-C handler: {e}\n\nExiting..."), 1);
+    }
+
+    match Loop::in_directory(path) {
+        Ok(task) => task.run(),
+        Err(e) => exit_with_msg(e, 1),
     }
 }
 

@@ -32,7 +32,7 @@ pub struct CLI {
         help = "Sets the output as the desktop wallpaper",
         default_value = "false"
     )]
-    pub wallpaper: bool,
+    pub set_wallpaper: bool,
 
     #[arg(
         long = "loop",

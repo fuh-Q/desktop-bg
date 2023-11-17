@@ -1,14 +1,44 @@
-use std::f32::consts::PI;
-use image::{ImageBuffer, Rgba};
-use imageproc::{drawing::draw_antialiased_line_segment_mut as draw_line, pixelops::interpolate};
+use crate::{exit_with_msg, path_from_input, cli, bgtask};
+
+use image::{open, ImageBuffer, Rgba};
+use std::{env, f32::consts::PI, error::Error};
+use imageproc::{
+    pixelops::interpolate,
+    drawing::draw_antialiased_line_segment_mut as draw_line
+};
 
 type ImageRef<'a> = &'a mut ImageBuffer<Rgba<u8>, Vec<u8>>;
 
+const ORIGINAL_IMAGE: &str = "image\\wallpaper.png";
 const WHITE: Rgba<u8> = Rgba([255, 255, 255, 255]);
 const CLOCK_CENTER: (i32, i32) = (631, 88);
 const LINE_WEIGHT: u8 = 3;
 
-pub fn draw_hand(image: ImageRef, mut hand_value: f32, is_hour_hand: bool) {
+pub fn generate_image(args: &cli::CLI) -> Result<(), Box<dyn Error>> {
+    let image_path = env::current_exe()?.ancestors().nth(3).unwrap().join(ORIGINAL_IMAGE);
+    let target = path_from_input(&args.target);
+
+    let mut image = open(&image_path)?;
+    let image = image.as_mut_rgba8().unwrap();
+
+    let (hours, minutes) = args.get_time();
+    draw_hand(image, minutes, false);
+    draw_hand(image, hours, true);
+
+    let target_str = target.as_path().to_str().unwrap();
+    match image.save(&target) {
+        Ok(()) => println!("Successfully saved at => {target_str}"),
+        Err(e) => exit_with_msg(format!("{e} (Path: {target_str})"), 1),
+    }
+
+    if args.set_wallpaper {
+        bgtask::try_set_wallpaper(target_str);
+    }
+
+    Ok(())
+}
+
+fn draw_hand(image: ImageRef, mut hand_value: f32, is_hour_hand: bool) {
     let mut length_scale = 1.;
     if is_hour_hand {
         hand_value *= 5.;
