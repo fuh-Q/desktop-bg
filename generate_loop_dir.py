@@ -8,7 +8,6 @@ This script is pretty much just to generate such a directory
 import os
 import sys
 import subprocess
-
 from pathlib import Path
 
 if not len(sys.argv) - 1:
