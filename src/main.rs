@@ -28,10 +28,12 @@ fn path_from_input<S: AsRef<str>>(input: S) -> PathBuf {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli_args = cli::CLI::parse();
+
     if cli_args.loop_dir {
         bgtask::start_loop(path_from_input(&cli_args.target));
     } else if cli_args.run_once {
-        bgtask::Loop::in_directory(path_from_input(&cli_args.target))?.set_current_time();
+        let task = bgtask::Loop::in_directory(path_from_input(&cli_args.target))?;
+        task.set_current_time(cli_args.wait);
         std::process::exit(0);
     }
 

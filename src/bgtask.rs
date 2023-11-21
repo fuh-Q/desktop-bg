@@ -21,15 +21,18 @@ impl Loop {
 
     pub fn run(&self) -> ! {
         loop {
-            self.set_current_time();
+            self.set_current_time(true);
+        }
+    }
+
+    pub fn set_current_time(&self, wait: bool) {
+        if wait {
             let rn = Local::now();
 
             let delay = 60 - rn.second() as u64;
             thread::sleep(StdDuration::from_secs(delay));
         }
-    }
 
-    pub fn set_current_time(&self) {
         let rn = Local::now();
         let path = self.directory.join(format!("{}-{}.png", rn.hour(), rn.minute()));
 

@@ -45,6 +45,12 @@ pub struct CLI {
         help = "Set the wallpaper to the current time, using a pre-generated image from a target directory"
     )]
     pub run_once: bool,
+
+    #[arg(
+        long = "wait",
+        help = "Wait until the zeroeth second on the clock before running"
+    )]
+    pub wait: bool,
 }
 
 impl CLI {
