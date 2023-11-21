@@ -1,8 +1,9 @@
-use crate::{bgtask, cli, exit_with_msg, path_from_input};
+use std::{env, error::Error, f32::consts::PI};
 
 use image::{open, ImageBuffer, Rgba};
 use imageproc::{drawing::draw_antialiased_line_segment_mut as draw_line, pixelops::interpolate};
-use std::{env, error::Error, f32::consts::PI};
+
+use crate::{bgtask, cli, exit_with_msg, path_from_input};
 
 type ImageRef<'a> = &'a mut ImageBuffer<Rgba<u8>, Vec<u8>>;
 
@@ -13,11 +14,7 @@ const LINE_WEIGHT: u8 = 3;
 
 pub fn generate_image(args: &cli::CLI) -> Result<(), Box<dyn Error>> {
     let target = path_from_input(&args.target);
-    let image_path = env::current_exe()?
-        .ancestors()
-        .nth(3)
-        .unwrap()
-        .join(ORIGINAL_IMAGE);
+    let image_path = env::current_exe()?.ancestors().nth(3).unwrap().join(ORIGINAL_IMAGE);
 
     let mut image = open(&image_path)?;
     let image = image.as_mut_rgba8().unwrap();

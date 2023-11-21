@@ -53,7 +53,7 @@ impl CLI {
         let minutes = self.minutes.parse::<f32>().unwrap_or(rn.minute() as f32) % 60.;
         let mut hours = self.hours.parse::<f32>().unwrap_or(rn.hour() as f32) % 12.;
 
-        // moves the hour hand with the minutes so it's not stuck in one spot the whole time
+        // make the hour hand not stuck in the same spot every hour
         hours += minutes / 60.;
 
         (hours, minutes)

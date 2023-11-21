@@ -2,8 +2,9 @@ mod bgtask;
 mod cli;
 mod drawing;
 
-use clap::Parser;
 use std::{env, error::Error, path::PathBuf};
+
+use clap::Parser;
 
 #[macro_export]
 macro_rules! exit_with_msg {

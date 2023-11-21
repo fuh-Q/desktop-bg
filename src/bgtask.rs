@@ -1,9 +1,10 @@
-use crate::exit_with_msg;
+use std::{path::PathBuf, thread, time::Duration as StdDuration};
 
 use chrono::{Local, Timelike};
 use ctrlc;
-use std::{path::PathBuf, thread, time::Duration as StdDuration};
 use wallpaper;
+
+use crate::exit_with_msg;
 
 pub struct Loop {
     directory: PathBuf,
@@ -30,9 +31,7 @@ impl Loop {
 
     pub fn set_current_time(&self) {
         let rn = Local::now();
-        let path = self
-            .directory
-            .join(format!("{}-{}.png", rn.hour(), rn.minute()));
+        let path = self.directory.join(format!("{}-{}.png", rn.hour(), rn.minute()));
 
         try_set_wallpaper(path.as_path().to_str().unwrap());
     }
