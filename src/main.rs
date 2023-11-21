@@ -1,28 +1,28 @@
+mod bgtask;
 mod cli;
 mod drawing;
-mod bgtask;
 
 use clap::Parser;
-use std::{
-    env,
-    error::Error,
-    fmt::Display,
-    path::PathBuf,
-};
+use std::{env, error::Error, path::PathBuf};
 
-fn path_from_input<S>(input: S) -> PathBuf
-where S: AsRef<str>
-{
-    env::current_dir().unwrap().join(input.as_ref().replace("/", "\\"))
-    // windows moment
+#[macro_export]
+macro_rules! exit_with_msg {
+    ($msg:tt, 0) => {{
+        println!($msg);
+        std::process::exit(0);
+    }};
+
+    ($msg:tt, $code:expr) => {{
+        eprintln!($msg);
+        std::process::exit($code);
+    }};
 }
 
-fn exit_with_msg<S>(msg: S, code: i32) -> !
-where S: AsRef<str> + Display
-{
-    if code != 0 { eprintln!("{msg}"); }
-    else { println!("{msg}"); }
-    std::process::exit(code);
+#[rustfmt::skip]
+fn path_from_input<S: AsRef<str>>(input: S) -> PathBuf {
+    env::current_dir().unwrap().join(
+        input.as_ref().replace("/", "\\")
+    )
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     if let Err(e) = drawing::generate_image(&cli_args) {
-        exit_with_msg(format!("{e}"), 1);
+        exit_with_msg!("{e}", 1);
     }
 
     Ok(())

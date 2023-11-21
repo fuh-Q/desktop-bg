@@ -1,11 +1,8 @@
-use crate::{exit_with_msg, path_from_input, cli, bgtask};
+use crate::{bgtask, cli, exit_with_msg, path_from_input};
 
 use image::{open, ImageBuffer, Rgba};
-use std::{env, f32::consts::PI, error::Error};
-use imageproc::{
-    pixelops::interpolate,
-    drawing::draw_antialiased_line_segment_mut as draw_line
-};
+use imageproc::{drawing::draw_antialiased_line_segment_mut as draw_line, pixelops::interpolate};
+use std::{env, error::Error, f32::consts::PI};
 
 type ImageRef<'a> = &'a mut ImageBuffer<Rgba<u8>, Vec<u8>>;
 
@@ -15,8 +12,12 @@ const CLOCK_CENTER: (i32, i32) = (631, 88);
 const LINE_WEIGHT: u8 = 3;
 
 pub fn generate_image(args: &cli::CLI) -> Result<(), Box<dyn Error>> {
-    let image_path = env::current_exe()?.ancestors().nth(3).unwrap().join(ORIGINAL_IMAGE);
     let target = path_from_input(&args.target);
+    let image_path = env::current_exe()?
+        .ancestors()
+        .nth(3)
+        .unwrap()
+        .join(ORIGINAL_IMAGE);
 
     let mut image = open(&image_path)?;
     let image = image.as_mut_rgba8().unwrap();
@@ -28,7 +29,7 @@ pub fn generate_image(args: &cli::CLI) -> Result<(), Box<dyn Error>> {
     let target_str = target.as_path().to_str().unwrap();
     match image.save(&target) {
         Ok(()) => println!("Successfully saved at => {target_str}"),
-        Err(e) => exit_with_msg(format!("{e} (Path: {target_str})"), 1),
+        Err(e) => exit_with_msg!("{e} (Path: {target_str})", 1),
     }
 
     if args.set_wallpaper {

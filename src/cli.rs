@@ -44,7 +44,7 @@ pub struct CLI {
         long = "run-once",
         help = "Set the wallpaper to the current time, using a pre-generated image from a target directory"
     )]
-    pub run_once: bool
+    pub run_once: bool,
 }
 
 impl CLI {
