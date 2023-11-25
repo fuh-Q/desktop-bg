@@ -39,6 +39,7 @@ def make_image(hour: int, minute: int):
         print(out.decode("utf-8"))
     if err:
         print(err.decode("utf-8"))
+        sys.exit(1)
 
 try:
     for i in range(24):
