@@ -20,6 +20,8 @@ impl Loop {
     }
 
     pub fn run(&self) -> ! {
+        self.set_current_time(false);
+
         loop {
             self.set_current_time(true);
         }
